@@ -1,9 +1,9 @@
 node_modules
 *.sublime-workspace
 *.sublime-project
-/nbproject/private/
+/nbproject/private/**
 nbproject/project.properties
 nbproject/project.xml
 webapp/npm-debug.log
-*/app/bower_components
-/webapp/dist/
+*/app/bower_components/**
+/webapp/dist/**
