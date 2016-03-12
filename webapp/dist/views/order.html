@@ -1,0 +1,75 @@
+<div class="well" ng-show="!resolved"><i class="fa fa-spinner fa-spin"></i> Loading order. Please wait...</div>
+<div ng-show="resolved">
+  <div class="pull-right">
+    <a class="btn btn-danger" ng-href="#/deleteOrder/{{order._id}}"><i class="fa fa-times"></i> Close Order</a>
+    <a class="btn btn-success" href="#/printOrder/{{order._id}}"><i class="fa fa-print"></i> Print Order</a>
+  </div>
+  <h1>{{order.from.name}}</h1>
+  <div class="h4">Order by: {{order.author}} (<a href="mailto:{{order.email}}">{{order.email}}</a>)</div>
+  <div class="h4" ng-cloak="" ng-show="order.menuLink">Menu: <a ng-href="{{order.menuLink}}">{{order.menuLink}}</a></div>
+  <table class="table table-striped" style="margin-top: 1em">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Price</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in order.items">
+          <td>
+              <div class="h4">{{item.name}}</div>
+              <div class="text-muted">{{item.author}}</div>
+          </td>
+          <td>
+              <div class="h4">{{(item.price || 0) | currency:"€"}}</div>
+          </td>
+          <td>
+              <div class="pull-right">
+                <label class="btn btn-success btn-sm">
+                  <input type="checkbox" ng-model="item.paid" ng-change="itemChanged(item, order)"> Paid
+                </label>
+                <button class="btn btn-sm btn-danger" ng-click="deleteItem(item, $index)"><i class="fa fa-trash-o"></i></button>
+              </div>
+          </td>
+        </tr>
+        <tr ng-show="order.items.length == 0">
+          <td colspan="100">No items have been added to this order yet. Add an item by filling the form below.</td>
+        </tr>
+        <tr>
+              <td colspan="100">
+                <form class="form-inline" ng-submit="save()" ng-controller="CreateItemCtrl">
+                  <div class="form-group">
+                    <input type="text" class="form-control" required="" ng-model="item.name" typeahead="choice.name for choice in choices | filter:$viewValue | limitTo: 8" typeahead-on-select="itemNameChanged()" ng-change="itemNameChanged()" placeholder="Item">
+                  </div>
+                  <div class="form-group">
+                    <input type="numeric" class="form-control" required="" ng-model="item.author" placeholder="Your Name">
+                  </div>
+                  <div class="form-group">
+                    <div class="input-group">
+                      <span class="input-group-addon"><i class="fa fa-euro"></i></span>
+                      <input type="numeric" class="form-control" required="" ng-model="item.price" placeholder="Price">
+                    </div>
+                  </div>
+                  <div class="pull-right">
+                    <i class="fa fa-spinner fa-spin" ng-show="!resolved"></i>
+                    <button class="btn btn-success" ng-disabled="!resolved" type="submit"><i class="fa fa-plus"></i></button>
+                  </div>
+                </form>
+              </td>
+        </tr>
+    </tbody>
+    <tfoot>
+        <tr>
+            <td class="h3">Total:</td>
+            <td class="h3">{{order.total | currency:"€" }}</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="h3">Paid:</td>
+            <td class="h3">{{order.paid | currency:"€" }}</td>
+            <td></td>
+        </tr>
+    </tfoot>
+  </table>
+</div>

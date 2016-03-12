@@ -1,0 +1,111 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Ejja Ha Nieklu</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" href="styles/eddc33a6.main.css"/>
+    </head>
+    <body ng-app="ikelClientApp">
+        <!--[if lt IE 7]>
+          <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!--[if lt IE 9]>
+          <script src="bower_components/es5-shim/es5-shim.js"></script>
+          <script src="bower_components/json3/lib/json3.min.js"></script>
+        <![endif]-->
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-2 col-md-offset-2 hidden-print" ng-controller="OrdersListCtrl">
+              <div class="row">
+                <div class="col-xs-12" style="text-align: center">
+                  <img src="images/42aeaa7e.front-logo.png" class="front-logo" alt="Ejja Ħa Nieklu Logo">
+                </div>
+              </div>
+              <div ng-cloak="" ng-show="!orders.$resolved" class="row navigation-row">
+                <div class="col-xs-12">
+                  <div class="well">
+                    <i class="fa fa-spinner fa-spin"></i> Loading Orders...
+                  </div>
+                </div>
+              </div>
+              <div ng-cloak="" ng-show="orders.$resolved && orders.error" class="row navigation-row">
+                <div class="col-xs-12">
+                  <div class="alert alert-danger">
+                    <i class="fa fa-exclamation-circle"></i> An error has occurred while loading the list of open orders. Refreshing the page might fix this issue.
+                  </div>
+                </div>
+              </div>
+              <div ng-cloak="" ng-show="orders.$resolved && !orders.error && orders.length == 0" class="row navigation-row">
+                <div class="col-xs-12">
+                  <div class="well">
+                    There are no orders yet. Click on the <em>Start New Order</em> button to open a new order.
+                  </div>
+                </div>
+              </div>
+              <div ng-cloak="" ng-show="orders.$resolved && orders.length > 0" class="row navigation-row">
+                <div class="col-xs-12">
+                  <div>
+                    <ul class="nav nav-pills nav-stacked">
+                      <li ng-repeat="order in orders" role="presentation" ng-class="{'active': order.viewing}">
+                        <a ng-href="#/order/{{order._id}}">{{order.from.name}}</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="row navigation-row">
+                <div class="col-xs-12">
+                  <a role="presentation" class="btn btn-success btn-block" href="#/createOrder"><i class="fa fa-plus-circle fa-fw"></i> Start New Order</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6" ng-view="">
+
+            </div>
+          </div>
+          <div class="row hidden-print" style="margin-top: 1em">
+            <div class="col-md-offset-2 col-md-8">
+              <div class="footer">
+                  <p>Ejja Ħa Nieklu App. By: <a href="https://github.com/KPull">@Kyle</a> &amp; <a href="https://github.com/camilleriluke">@Luke</a>. <span class="pull-right">Wish to <a href="https://github.com/camilleriluke/ejja-ha-nieklu">contribute?</a></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-50039309-1', 'ejja-ha-nieklu.herokuapp.com');
+          ga('send', 'pageview');
+
+        </script>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/socket.io-client/socket.io.js"></script>
+        <script src="bower_components/angular-socket-io/socket.js"></script>
+        <script src="bower_components/HTML5-Desktop-Notifications2/desktop-notify.js"></script>
+        <script src="bower_components/angular-web-notification/angular-web-notification.js"></script>
+
+        <script src="scripts/67ddff06.plugins.js"></script>
+
+        <script src="scripts/04442087.modules.js"></script>
+
+        <script src="scripts/423512d1.scripts.js"></script>
+    </body>
+</html>
