@@ -4,6 +4,7 @@ var expect = require('expect');
 var extend = require("util")._extend;
 var fork = require('child_process').fork;
 var request = require('request');
+var io = require('socket.io-client');
 
 var MongoClient = require('mongodb').MongoClient;
 var ObjectId = require('mongodb').ObjectId;
@@ -586,6 +587,75 @@ describe('Ejja Ħa Nieklu Backend Node.JS Module', function () {
         });
     });
 
+    describe('WebSocket functionality', function () {
+        var socket;
+
+        var orders = [{
+                _id: '000000000000000000000001',
+                restaurant: 'TGI Fridays'
+            }, {
+                _id: '000000000000000000000002',
+                restaurant: 'McDonalds'
+            }];
+
+        before('Prepare Mongo', function () {
+            return mongo(mongoUri, {orders: orders});
+        });
+
+        before('connect to the webserver', function (done) {
+            socket = io('http://localhost:' + port);
+            done();
+        });
+
+        it('creating an order should cause a message to be received', function (done) {
+            socket.on('new_order', function (body) {
+                expect(body.from).toEqual({name: 'Il-Veduta', address: 'Rabat'});
+                expect(body.menuLink).toEqual('http://menu.test');
+                expect(body.author).toEqual('Kyle');
+                expect(body.email).toEqual('kyle@test.test');
+                done();
+            });
+            request({
+                url: 'http://localhost:' + port + '/order',
+                method: 'POST',
+                json: true,
+                body: {
+                    from: {
+                        name: 'Il-Veduta',
+                        address: 'Rabat'
+                    },
+                    menuLink: 'http://menu.test',
+                    author: 'Kyle',
+                    email: 'kyle@test.test'
+                }
+            }, function (err, resp, body) {
+                if (err) {
+                    done(new Error('Error during request', err));
+                }
+            });
+        });
+
+        it('deleting an order should cause a message to be received', function (done) {
+            socket.once('closed_order', function (body) {
+                expect(body).toEqual('000000000000000000000001');
+                done();
+            });
+            request({
+                url: 'http://localhost:' + port + '/order/000000000000000000000001',
+                method: 'DELETE',
+                json: true,
+            }, function (err, resp, body) {
+                if (err) {
+                    done(new Error('Error during request', err));
+                }
+            });
+        });
+
+        after('Deregister all socket listeners', function (done) {
+            socket.removeAllListeners('new_order');
+            socket.removeAllListeners('closed_order');
+            done();
+        });
     });
 
     it('listens on the specified port', function (done) {
