@@ -56,8 +56,7 @@ angular.module('ikelClientApp', [
   });
   ehnSocket.on('closed_order', function(order) {
     webNotification.showNotification('Food Order Closed', {
-      body: 'The food order for ' + order.from.name + ' by ' +
-        order.author + ' has been closed.',
+      body: 'The food order ' + order + ' has been closed.',
       icon: 'images/burger.png',
       autoClose: 24000
     }, function() {});
